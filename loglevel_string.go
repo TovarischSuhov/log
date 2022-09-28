@@ -8,16 +8,16 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
-	_ = x[Debug-0]
-	_ = x[Info-1]
-	_ = x[Warn-2]
-	_ = x[Error-3]
-	_ = x[Fatal-4]
+	_ = x[DebugLevel-0]
+	_ = x[InfoLevel-1]
+	_ = x[WarnLevel-2]
+	_ = x[ErrorLevel-3]
+	_ = x[FatalLevel-4]
 }
 
-const _logLevel_name = "DebugInfoWarnErrorFatal"
+const _logLevel_name = "DebugLevelInfoLevelWarnLevelErrorLevelFatalLevel"
 
-var _logLevel_index = [...]uint8{0, 5, 9, 13, 18, 23}
+var _logLevel_index = [...]uint8{0, 10, 19, 28, 38, 48}
 
 func (i logLevel) String() string {
 	if i < 0 || i >= logLevel(len(_logLevel_index)-1) {

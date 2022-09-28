@@ -8,54 +8,59 @@ import (
 type logLevel int
 
 const (
-	Debug logLevel = iota
-	Info
-	Warn
-	Error
-	Fatal
+	DebugLevel logLevel = iota
+	InfoLevel
+	WarnLevel
+	ErrorLevel
+	FatalLevel
 )
 
+const esc = "\u001B["
+
 var colors = map[logLevel]string{
-	Debug: "",
-	Info:  "",
-	Warn:  "",
-	Error: "",
-	Fatal: "",
+	DebugLevel: "",
+	InfoLevel:  esc + "00;32m",
+	WarnLevel:  esc + "00;33m",
+	ErrorLevel: esc + "00;31m",
+	FatalLevel: esc + "01;31m",
 }
 
-const finishColor = ""
+const finishColor = esc + "m"
 
 var (
 	UseColors = false
-	LogLevel  = Info
+	LogLevel  = InfoLevel
 )
 
-func printMsg(level logLevel, msg string) {
+func printMsg(level logLevel, msg string, args ...interface{}) {
+	if level < LogLevel {
+		return
+	}
 	ts := time.Now().Format(time.RFC3339)
 	prefix := "[" + level.String() + "]"
 	if UseColors {
 		prefix = colors[level] + prefix + finishColor
 	}
-	fmt.Printf("%s %s %s", ts, prefix, msg)
+	fmt.Printf("%s %s %s\n", ts, prefix, fmt.Sprintf(msg, args...))
 }
 
-func Debug(msg string) {
-	printMsg(Debug, msg)
+func Debug(msg string, args ...interface{}) {
+	printMsg(DebugLevel, msg, args...)
 }
 
-func Info(msg string) {
-	printMsg(Info, msg)
+func Info(msg string, args ...interface{}) {
+	printMsg(InfoLevel, msg, args...)
 }
 
-func Warn(msg string) {
-	printMsg(Warn, msg)
+func Warn(msg string, args ...interface{}) {
+	printMsg(WarnLevel, msg, args...)
 }
 
-func Error(msg string) {
-	printMsg(Error, msg)
+func Error(msg string, args ...interface{}) {
+	printMsg(ErrorLevel, msg, args...)
 }
 
-func Panic(msg string) {
-	printMsg(Panic, msg)
+func Fatal(msg string, args ...interface{}) {
+	printMsg(FatalLevel, msg, args...)
 	panic("sends panic")
 }
